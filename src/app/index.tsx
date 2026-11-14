@@ -1,18 +1,17 @@
-import { useState } from 'react';
-import { Text, View } from 'react-native';
-import Boton from '../components/Boton';
-import Etiqueta from '../components/Etiqueta';
-import { estilos } from '../lib/estilos';
+import { Redirect } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { haySesion } from '../lib/auth';
 
 export default function Inicio() {
-  const [contador, setContador] = useState(0);
+  const [sesion, setSesion] = useState<boolean | null>(null);
 
-  return (
-    <View style={estilos.pantalla}>
-      <Text style={estilos.titulo}>Mini One Space</Text>
-      <Etiqueta texto='Hola' color='#16a34a' />
-      <Text>Has tocado {contador} veces</Text>
-      <Boton titulo='Sumar' onPress={() => setContador(contador + 1)} />
-    </View>
-  );
+  useEffect(() => {
+    haySesion().then(setSesion);
+  }, []);
+
+  if (sesion === null) {
+    return <ActivityIndicator style={{ marginTop: 80 }} />;
+  }
+  return <Redirect href={sesion ? '/productos' : '/login'} />;
 }
