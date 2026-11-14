@@ -19,7 +19,7 @@ export default function Login() {
     const ok = await iniciarSesion(email, password);
     setCargando(false);
     if (ok) {
-      router.replace('/productos');
+      router.replace('/peliculas');
     } else {
       Alert.alert('Error', 'Correo o contraseña incorrectos');
     }
@@ -44,6 +44,7 @@ export default function Login() {
         onChangeText={setPassword}
       />
       <Boton titulo={cargando ? 'Entrando...' : 'Entrar'} onPress={entrar} deshabilitado={cargando} />
+      <Boton titulo='Crear cuenta' onPress={() => router.push('/registro')} />
     </View>
   );
 }
