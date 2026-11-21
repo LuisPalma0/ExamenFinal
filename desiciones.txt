@@ -17,6 +17,7 @@ Quien se registra siempre es estudiante. El administrador se asigna a mano desde
 Un estudiante solo ve sus propios préstamos, y el administrador ve todos.
 No se puede pedir un equipo que no está disponible, ni tener dos solicitudes pendientes del mismo equipo.
 
+
 Utilice la IA en aproximadamente un 60% del proyecto. Es una
 estimacion personal, no una medicion exacta. El 40% restante corresponde a mi
 trabajo: decidir que debia hacer la aplicacion, probarla, buscar la informacion
