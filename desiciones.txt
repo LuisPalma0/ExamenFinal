@@ -1,0 +1,47 @@
+Utilice la IA en aproximadamente un 60% del proyecto. Es una
+estimacion personal, no una medicion exacta. El 40% restante corresponde a mi
+trabajo: decidir que debia hacer la aplicacion, probarla, buscar la informacion
+que la IA no podia ver y comprobar que cada cambio funcionara.
+ 
+La IA me ayudo sobre todo en tareas que requerian mucho escribir y teclear, en
+tareas tediosas y repetitivas, y en resolver errores, especialmente con Supabase.
+ 
+Ejemplos concretos:
+ 
+- Codigo repetitivo: escritura de funciones de autenticacion, pantallas y
+  validaciones de formularios que habrian tomado mucho tiempo a mano.
+- Revision del inicio de sesion: explicacion de por que el login podia fallar
+  (confirmacion de correo, errores que se ocultaban, sesion que no se renovaba)
+  y propuesta de codigo para mostrar el error real al usuario.
+- Errores de Supabase: ayuda para interpretar el error "Database error saving
+  new user" y para llegar a su causa (una restriccion de la tabla de perfiles
+  sobre el campo "rol").
+- Consultas SQL: redaccion de consultas para revisar el trigger, la estructura
+  de la tabla y los usuarios sin confirmar.
+- Limpieza del proyecto: metodo para encontrar archivos y dependencias que
+  sobraban de la plantilla de Expo.
+- Documentacion: explicacion paso a paso de como guardar el SQL en el proyecto
+  y subir los cambios a GitHub.
+ 
+Algunos de los casos en los que necesite revisar y verificar lo hecho con la IA podrian ser:
+-Causa del error al registrarse.
+  La IA no podia ver mi base de datos, asi que sus primeras respuestas fueron
+  solo hipotesis (nombres de campos distintos, restricciones, triggers
+  duplicados). El error real aparecio cuando yo revise los logs de Supabase y
+  se los mostre: una violacion de la restriccion "perfiles_rol_check". La causa
+  se encontro gracias a esa verificacion mia, no por la suposicion inicial.
+ 
+Funcion del trigger.
+  La IA no tenia el codigo real de mi trigger en Supabase, por lo que no podia
+  darme la version exacta para guardar. Tuve que extraer el codigo directamente
+  de Supabase y usar esa version en lugar de un ejemplo generico.
+ 
+Confirmacion del correo.
+  Despues de arreglar el registro, aparecio un problema que no habia
+  ocurrido antes: los usuarios nuevos no podian entrar por la confirmacion del
+  correo. Lo identifique al probar la aplicacion y apliqué la solucion en el
+  panel de Supabase.
+ 
+Utilice inteligencia artificial como herramienta de apoyo, que revise
+y probe el codigo que genero, y que entiendo el funcionamiento general del
+proyecto y me hago responsable de su contenido.
