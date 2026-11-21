@@ -1,3 +1,22 @@
+Una universidad necesita controlar quién se lleva el equipo de sus laboratorios, hasta cuándo y si lo devolvió. La app reemplaza ese control con dos tipos de usuario.
+El estudiante se registra solo, tiene un perfil con nombre, carnet, carrera y foto, 
+ve el catálogo de equipos y solicita préstamos. 
+El administrador aprueba o rechaza las solicitudes, marca los equipos como devueltos, revisa el historial y genera reportes.
+
+Plantee 3 tablas:
+
+Perfiles: los datos de cada usuario (nombre, carnet, carrera, foto y rol de estudiante o administrador).
+Equipos: el catálogo, con nombre, descripción y si está disponible o no.
+Préstamos: cada solicitud, vinculada al estudiante que la pidió y al equipo solicitado. Guarda la fecha de préstamo, la fecha de devolución y el estado.
+
+Un estudiante puede tener muchos préstamos, y un equipo puede aparecer en muchos préstamos a lo largo del tiempo.
+
+El estudiante solicita un equipo y la solicitud queda pendiente. El administrador la aprueba o la rechaza. Si la aprueba, el equipo pasa a no disponible. Cuando el equipo regresa, el administrador lo marca como devuelto y vuelve a estar disponible.
+
+Quien se registra siempre es estudiante. El administrador se asigna a mano desde Supabase, para que nadie se haga administrador desde la app.
+Un estudiante solo ve sus propios préstamos, y el administrador ve todos.
+No se puede pedir un equipo que no está disponible, ni tener dos solicitudes pendientes del mismo equipo.
+
 Utilice la IA en aproximadamente un 60% del proyecto. Es una
 estimacion personal, no una medicion exacta. El 40% restante corresponde a mi
 trabajo: decidir que debia hacer la aplicacion, probarla, buscar la informacion

@@ -1,0 +1,17 @@
+Ayudar a realizacion de la base del proyecto
+Puedes ayudarme a realizar la bse de un proyecto en codigo typescrip utilizando Supabase 
+
+Problemas de inicio de sesión y limpieza
+Compartí el código de mi proyecto en un .txt. Necesito resolver problemas con el inicio de sesión y limpiar archivos que creo que sobran.
+
+Registro que no responde.
+Ya tengo un usuario creado desde Supabase que sí puede entrar, pero cuando intento crear otro desde el sitio web no pasa nada al presionar Registrar.
+
+Error de Supabase al crear usuarios.
+Me sale 'Database error saving new user'. Te comparto lo que muestran los logs.
+
+Confirmación de correo.
+El registro ya funciona, pero ahora tengo el problema de la confirmación del correo. Explícame a detalle qué hacer.
+
+Error al arrancar la app.
+Al ejecutar el comando me sale 'ConfigError: package.json does not exist'.
