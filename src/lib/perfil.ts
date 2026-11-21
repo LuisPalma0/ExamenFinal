@@ -1,11 +1,12 @@
+import { Platform } from 'react-native';
 import { supabase } from './supabase';
 
 export type Perfil = {
   id: string;
   nombre: string;
-  edad: number;
-  tarjeta_ultimos4: string | null;
-  rol: 'cliente' | 'admin';
+  carnet: string;
+  carrera: string;
+  rol: 'estudiante' | 'admin';
   foto_path: string | null;
 };
 
@@ -15,15 +16,11 @@ export async function obtenerPerfil(): Promise<Perfil | null> {
   if (!id) return null;
   const { data, error } = await supabase
     .from('perfiles')
-    .select('id, nombre, edad, tarjeta_ultimos4, rol, foto_path')
+    .select('id, nombre, carnet, carrera, rol, foto_path')
     .eq('id', id)
     .maybeSingle();
   if (error) console.log(error.message);
   return (data as Perfil | null) ?? null;
-}
-
-export function tarjetaEnmascarada(ultimos4: string | null) {
-  return ultimos4 ? '**** **** **** ' + ultimos4 : 'Sin tarjeta';
 }
 
 export async function urlFoto(path: string | null): Promise<string | null> {
@@ -37,9 +34,20 @@ export async function subirFoto(uri: string, tipo: string): Promise<string | nul
   const id = sesion.user?.id;
   if (!id) return 'No hay sesión';
   const ruta = `${id}/perfil.jpg`;
-  const formulario = new FormData();
-  formulario.append('file', { uri, name: 'perfil.jpg', type: tipo } as any);
-  const { error } = await supabase.storage.from('fotos').upload(ruta, formulario, { upsert: true });
+
+  // En web se sube el archivo como "blob"; en celular se usa FormData
+  let cuerpo: any;
+  if (Platform.OS === 'web') {
+    cuerpo = await (await fetch(uri)).blob();
+  } else {
+    const formulario = new FormData();
+    formulario.append('file', { uri, name: 'perfil.jpg', type: tipo } as any);
+    cuerpo = formulario;
+  }
+
+  const { error } = await supabase.storage
+    .from('fotos')
+    .upload(ruta, cuerpo, { upsert: true, contentType: tipo });
   if (error) return error.message;
   const { error: errorRuta } = await supabase.rpc('guardar_foto', { p_path: ruta });
   return errorRuta ? errorRuta.message : null;

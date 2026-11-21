@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 
+// Devuelve null si todo salió bien, o el texto del error
 export async function iniciarSesion(email: string, password: string): Promise<string | null> {
   const { error } = await supabase.auth.signInWithPassword({
     email: email.trim(),
@@ -24,25 +25,30 @@ export type DatosRegistro = {
   email: string;
   password: string;
   nombre: string;
-  edad: number;
-  tarjeta: string;
+  carnet: string;
+  carrera: string;
 };
 
+// Solo se registran estudiantes: el rol lo asigna la base de datos, no la app
 export async function registrarUsuario(d: DatosRegistro): Promise<string | null> {
-  const digitos = d.tarjeta.replace(/[^0-9]/g, '');
   const { data, error } = await supabase.auth.signUp({
     email: d.email.trim(),
     password: d.password,
     options: {
       data: {
         nombre: d.nombre.trim(),
-        edad: d.edad,
-        tarjeta_ultimos4: digitos.slice(-4),
+        carnet: d.carnet.trim(),
+        carrera: d.carrera.trim(),
       },
     },
   });
-  if (error) return error.message;
-  // Si el correo ya existe y la confirmación está activa, Supabase no da error: devuelve un usuario "falso"
+  if (error) {
+    if (error.message.includes('Database error')) {
+      return 'No se pudo crear el perfil. Revisa que el carnet no esté ya registrado.';
+    }
+    return error.message;
+  }
+  // Si el correo ya existe, Supabase no da error pero devuelve un usuario sin identidades
   if (data.user && data.user.identities?.length === 0) return 'Ese correo ya está registrado';
   return null;
 }

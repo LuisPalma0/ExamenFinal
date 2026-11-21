@@ -2,8 +2,8 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import Boton from '../components/Boton';
-import { iniciarSesion } from '../lib/auth';
 import { avisar } from '../lib/avisar';
+import { iniciarSesion } from '../lib/auth';
 import { estilos } from '../lib/estilos';
 
 export default function Login() {
@@ -12,26 +12,26 @@ export default function Login() {
   const [cargando, setCargando] = useState(false);
 
   async function entrar() {
-  if (!email.trim() || !password) {
-    avisar('Faltan datos', 'Escribe tu correo y tu contraseña');
-    return;
-  }
-  setCargando(true);
-  try {
-    const error = await iniciarSesion(email, password);
-    if (error) {
-      avisar('No se pudo iniciar sesión', error);
+    if (!email.trim() || !password) {
+      avisar('Faltan datos', 'Escribe tu correo y tu contraseña');
       return;
     }
-    router.replace('/peliculas');
-  } finally {
-    setCargando(false);
+    setCargando(true);
+    try {
+      const error = await iniciarSesion(email, password);
+      if (error) {
+        avisar('No se pudo iniciar sesión', error);
+        return;
+      }
+      router.replace('/equipos');
+    } finally {
+      setCargando(false);
+    }
   }
-}
 
   return (
     <View style={estilos.pantalla}>
-      <Text style={estilos.titulo}>Iniciar sesión</Text>
+      <Text style={estilos.titulo}>Laboratorios - Iniciar sesión</Text>
       <TextInput
         style={estilos.input}
         placeholder='Correo'
@@ -48,7 +48,7 @@ export default function Login() {
         onChangeText={setPassword}
       />
       <Boton titulo={cargando ? 'Entrando...' : 'Entrar'} onPress={entrar} deshabilitado={cargando} />
-      <Boton titulo='Crear cuenta' onPress={() => router.push('/registro')} />
+      <Boton titulo='Registrarme como estudiante' onPress={() => router.push('/registro')} />
     </View>
   );
 }

@@ -13,5 +13,5 @@ export default function Inicio() {
   if (sesion === null) {
     return <ActivityIndicator style={{ marginTop: 80 }} />;
   }
-  return <Redirect href={sesion ? '/peliculas' : '/login'} />;
+  return <Redirect href={sesion ? '/equipos' : '/login'} />;
 }
