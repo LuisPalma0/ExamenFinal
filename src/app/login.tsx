@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import Boton from '../components/Boton';
 import { iniciarSesion } from '../lib/auth';
+import { avisar } from '../lib/avisar';
 import { estilos } from '../lib/estilos';
 
 export default function Login() {
@@ -11,19 +12,22 @@ export default function Login() {
   const [cargando, setCargando] = useState(false);
 
   async function entrar() {
-    if (!email.trim() || !password) {
-      Alert.alert('Faltan datos', 'Escribe tu correo y tu contraseña');
+  if (!email.trim() || !password) {
+    avisar('Faltan datos', 'Escribe tu correo y tu contraseña');
+    return;
+  }
+  setCargando(true);
+  try {
+    const error = await iniciarSesion(email, password);
+    if (error) {
+      avisar('No se pudo iniciar sesión', error);
       return;
     }
-    setCargando(true);
-    const ok = await iniciarSesion(email, password);
+    router.replace('/peliculas');
+  } finally {
     setCargando(false);
-    if (ok) {
-      router.replace('/peliculas');
-    } else {
-      Alert.alert('Error', 'Correo o contraseña incorrectos');
-    }
   }
+}
 
   return (
     <View style={estilos.pantalla}>

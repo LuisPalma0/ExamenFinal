@@ -1,10 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Alert, Image, ScrollView, Text, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import Boton from '../components/Boton';
 import Etiqueta from '../components/Etiqueta';
 import { cerrarSesion } from '../lib/auth';
+import { avisar } from '../lib/avisar';
 import { estilos } from '../lib/estilos';
 import { obtenerPeliculas, rentarPelicula, type Pelicula } from '../lib/peliculas';
 import { obtenerPerfil, subirFoto, tarjetaEnmascarada, urlFoto, type Perfil } from '../lib/perfil';
@@ -32,10 +33,10 @@ export default function Peliculas() {
   async function rentar(p: Pelicula) {
     const error = await rentarPelicula(p.id);
     if (error) {
-      Alert.alert('No se pudo rentar', error);
+      avisar('No se pudo rentar', error);
       return;
     }
-    Alert.alert('Listo', `Rentaste ${p.titulo}. Puedes verla en Mis rentas.`);
+    avisar('Listo', `Rentaste ${p.titulo}. Puedes verla en Mis rentas.`);
   }
 
   async function cambiarFoto() {
@@ -49,7 +50,7 @@ export default function Peliculas() {
     const archivo = r.assets[0];
     const error = await subirFoto(archivo.uri, archivo.mimeType ?? 'image/jpeg');
     if (error) {
-      Alert.alert('No se pudo subir la foto', error);
+      avisar('No se pudo subir la foto', error);
       return;
     }
     await cargar();

@@ -1,11 +1,14 @@
 import { supabase } from './supabase';
 
-export async function iniciarSesion(email: string, password: string) {
+export async function iniciarSesion(email: string, password: string): Promise<string | null> {
   const { error } = await supabase.auth.signInWithPassword({
     email: email.trim(),
     password,
   });
-  return error === null;
+  if (!error) return null;
+  if (error.message.includes('Email not confirmed')) return 'Debes confirmar tu correo antes de entrar';
+  if (error.message.includes('Invalid login credentials')) return 'Correo o contraseña incorrectos';
+  return error.message;
 }
 
 export async function cerrarSesion() {
@@ -27,7 +30,7 @@ export type DatosRegistro = {
 
 export async function registrarUsuario(d: DatosRegistro): Promise<string | null> {
   const digitos = d.tarjeta.replace(/[^0-9]/g, '');
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: d.email.trim(),
     password: d.password,
     options: {
@@ -38,5 +41,8 @@ export async function registrarUsuario(d: DatosRegistro): Promise<string | null>
       },
     },
   });
-  return error ? error.message : null;
+  if (error) return error.message;
+  // Si el correo ya existe y la confirmación está activa, Supabase no da error: devuelve un usuario "falso"
+  if (data.user && data.user.identities?.length === 0) return 'Ese correo ya está registrado';
+  return null;
 }

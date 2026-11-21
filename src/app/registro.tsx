@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, Text, TextInput } from 'react-native';
+import { ScrollView, Text, TextInput } from 'react-native';
 import Boton from '../components/Boton';
 import { registrarUsuario } from '../lib/auth';
+import { avisar } from '../lib/avisar';
 import { estilos } from '../lib/estilos';
 
 export default function Registro() {
@@ -17,29 +18,29 @@ export default function Registro() {
     const edadNum = Number(edad);
     const digitos = tarjeta.replace(/[^0-9]/g, '');
     if (!nombre.trim() || !email.trim() || !password) {
-      Alert.alert('Faltan datos', 'Completa nombre, correo y contraseña');
+      avisar('Faltan datos', 'Completa nombre, correo y contraseña');
       return;
     }
     if (!Number.isInteger(edadNum) || edadNum < 1 || edadNum > 120) {
-      Alert.alert('Edad inválida', 'Escribe una edad entre 1 y 120');
+      avisar('Edad inválida', 'Escribe una edad entre 1 y 120');
       return;
     }
     if (digitos.length < 13 || digitos.length > 19) {
-      Alert.alert('Tarjeta inválida', 'El número debe tener entre 13 y 19 dígitos');
+      avisar('Tarjeta inválida', 'El número debe tener entre 13 y 19 dígitos');
       return;
     }
     if (password.length < 6) {
-      Alert.alert('Contraseña corta', 'Usa al menos 6 caracteres');
+      avisar('Contraseña corta', 'Usa al menos 6 caracteres');
       return;
     }
     setEnviando(true);
     const error = await registrarUsuario({ email, password, nombre, edad: edadNum, tarjeta: digitos });
     setEnviando(false);
     if (error) {
-      Alert.alert('No se pudo crear la cuenta', error);
+      avisar('No se pudo crear la cuenta', error);
       return;
     }
-    Alert.alert('Cuenta creada', 'Ya puedes iniciar sesión');
+    avisar('Cuenta creada', 'Ya puedes iniciar sesión');
     router.replace('/login');
   }
 
